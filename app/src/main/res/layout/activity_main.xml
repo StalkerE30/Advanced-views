@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".statsview.MainActivity">
 
     <ru.netology.statsview.ui.Statsview
         android:id="@+id/statsView"
         android:layout_width="300dp"
         android:layout_height="300dp"
-        app:textSize="20sp"
+        app:textSize="30sp"
         app:lineWidth="16dp"
         app:color1="#391279"
         app:color2="#939124"

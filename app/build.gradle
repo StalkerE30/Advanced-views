@@ -5,9 +5,9 @@ apply plugin: 'dagger.hilt.android.plugin'
 
 android {
     compileSdkVersion 33
-
+    namespace "ru.netology"
     defaultConfig {
-        applicationId "ru.netology.nmedia"
+        applicationId "ru.netology"
         minSdkVersion 22
         targetSdkVersion 33
         versionCode 1
@@ -42,7 +42,6 @@ android {
             buildConfigField "String", "BASE_URL", '"http://10.0.2.2:9999"'
         }
     }
-    namespace 'ru.netology.nmedia'
 }
 
 dependencies {

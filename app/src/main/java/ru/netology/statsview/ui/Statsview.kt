@@ -8,7 +8,7 @@ import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.withStyledAttributes
-import ru.netology.nmedia.R
+import ru.netology.R
 import ru.netology.statsview.ui.utils.AndroidUtils
 import kotlin.math.min
 import kotlin.random.Random
@@ -38,13 +38,13 @@ class Statsview @JvmOverloads constructor(
     var data: List<Float> = emptyList()
     set(value){
         field = value
-        invalidate() //вызвает fun onDraw
+        invalidate() //вызывает fun onDraw
     }
     private var radius = 0F
     private var center = PointF()
     private var oval = RectF()
     private val paint = Paint(
-        Paint.ANTI_ALIAS_FLAG //С„Р»Р°Рі СЃРіР»Р°Р¶РёРІР°РЅРёСЏ
+        Paint.ANTI_ALIAS_FLAG //флаг сглаживания
         ).apply {
         strokeWidth = lineWidth.toFloat()
         style = Paint.Style.STROKE
@@ -53,7 +53,7 @@ class Statsview @JvmOverloads constructor(
     }
 
     private val textPaint = Paint(
-        Paint.ANTI_ALIAS_FLAG // Включить сглаживание
+        Paint.ANTI_ALIAS_FLAG // флаг сглаживания
     ).apply {
         textSize = this@Statsview.textSize
         style = Paint.Style.FILL
@@ -72,24 +72,37 @@ class Statsview @JvmOverloads constructor(
     }
 
     override fun onDraw(canvas: Canvas) {
+
         if (data.isEmpty()){
             return
         }
         var startAngle = -90F
-        data.forEachIndexed(){index, datum ->
-            var angle = datum * 360F
-            paint.color = colors.getOrElse(index){generateRandomColor()}
-            canvas.drawArc(oval,startAngle,angle,false,paint)
-            startAngle+=angle
+        var sumData:Float = 0F
+        var primColor: Int =0
+        var primAngle : Float = data[0]/data.sum() * 360F/2
+        data.forEachIndexed { index, datum ->
+            //var angle = datum * 360F
+            sumData+=datum //пригодится потом
+            var angle = datum / data.sum() * 360F
+            paint.color = colors.getOrElse(index) { generateRandomColor() }
+            if (index == 0) {
+                primColor = paint.color
+            }
+            canvas.drawArc(oval, startAngle, angle, false, paint)
+            startAngle += angle
         }
+        paint.color = primColor
+        canvas.drawArc(oval, startAngle, primAngle, false, paint)
 
         canvas.drawText(
-            "%.2f%%".format(data.sum()*100),
+            //"%.2f%%".format(data.sum() * 100),
+            "%.2f%%".format(sumData / data.sum() * 100),
             center.x,
-            center.y + textPaint.textSize/4,
+            center.y + textPaint.textSize / 4,
             textPaint
         )
-        //invalidate()
+
+
     }
 
     private fun generateRandomColor() = Random.nextInt(0xFF000000.toInt(), 0xFFFFFFFF.toInt())
